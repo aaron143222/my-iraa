@@ -1,151 +1,31 @@
-let step = 0;
-let formData = {};
+"use strict"
 
-function changeContent() {
-  const box = document.getElementById('contentBox');
-  box.innerHTML = ""; // clear the content
+let image = document.querySelector('#image');
+let title = document.querySelector('#title');
+let btnYes = document.querySelector('#btnYes');
+let btnNo = document.querySelector('#btnNo');
+let happySound = new Audio("./assets/happy-cat.mp3")
+let sadSound = new Audio("./assets/crying-cat.mp3")
 
-  // Add the new content here
-  if (step === 0) {
-    box.innerHTML = `
-      <h5 class="mb-1">anong pangalan ng crush mue?</h5>
-      <input type="text" class="form-control" id="crushName" required>
-      <button class="btn btn-primary" onclick="nextStep()">Next</button>
-    `;
-  } else if (step === 1) {
-    box.innerHTML = `
-      <h5 class="mb-4">Gender?</h5>
-      <select class="form-select mb-4" id="crushGender" required>
-        <option value="">Select Gender</option>
-        <option>bading</option>
-        <option>Male</option>
-      </select>
-      <button class="btn btn-primary" onclick="nextStep()">Next</button>
-    `;
-  } else if (step === 2) {
-    box.innerHTML = `
-      <h5 class="mb-4">Callsign naten?</h5>
-      <select class="form-select mb-4" id="crushStatus" required>
-        <option value="">Select Status</option>
-        <option> crushiecakeszz</option>
-        <option>S babycakeszz (baby)</option>
-        <option>haii crush HAHHAHA</option>
-      </select>
-      <button class="btn btn-primary" onclick="nextStep()">Next</button>
-    `;
-  } else if (step === 3) {
-    box.innerHTML = `
-      <h5 class="mb-4">Upload his/her photo</h5>
-      <input class="form-control mb-4" type="file" id="crushPicture" accept="image/*" required onchange="previewImage()">
-      <div id="imagePreview" class="mt-3 mb-3"></div>
-      <button class="btn btn-primary" onclick="nextStep()">Next</button>
-    `;
-  } else if (step === 4) {
-    box.innerHTML = `
-      <h5 class="mb-4">mahal mo ba ako kahit bading ako??</h5>
-      <div class="mb-4">
-        <button class="btn btn-outline-success" onclick="setLove('Yes')">Yes</button>
-        <button class="btn btn-outline-danger" onclick="setLove('No')">No</button>
-      </div>
-    `;
-  }else if (step === 5) {
-        const imageSrc = formData.picture ? formData.picture : ''; // Use uploaded picture if available
-      
-        box.innerHTML = `
-          <h5 class="mb-4">miss mo nanaman ako ah!</h5>
-          <div class="chat-container">
-            <!-- User's message bubble -->
-            <div class="user-message">
-              <div class="message-bubble user-bubble">
-                <p>I love you!</p>
-              </div>
-            </div>
-            <!-- Crush's reply with profile pic and name -->
-            <div class="crush-message">
-              <div class="crush-profile-pic">
-                <img src="${imageSrc}" alt="Crush's Profile" class="profile-pic">
-              </div>
-              <div class="crush-message-content">
-                <span class="crush-name">${formData.name}</span>
-                <div class="message-bubble crush-bubble">
-                  <p>I love you too Ira ko</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p class="mt-3">i miss you Ira ko >_</p>
-        `;
-    }
-    
-      
-  
-  
+btnYes.addEventListener('click', () => {
+    image.src = "./assets/happy-cat-happy-happy-cat.gif"
+    title.innerHTML = "yieee i love you Ira ko miss na miss na kita 😘"
+    sadSound.pause()
+    happySound.play()
+    happySound.loop = true
+})
 
-  // Add fade-in effect
-  box.classList.remove('fade-in'); // reset the animation
-  void box.offsetWidth; // trigger reflow
-  box.classList.add('fade-in'); // apply fade-in
-}
+let btnYesScale = 1;
+let btnNoScale = 1;
 
-function nextStep() {
-  if (step === 0) {
-    formData.name = document.getElementById('crushName').value;
-    if (!formData.name) return alert("Please enter the name!");
-  } else if (step === 1) {
-    formData.gender = document.getElementById('crushGender').value;
-    if (!formData.gender) return alert("Please select gender!");
-  } else if (step === 2) {
-    formData.status = document.getElementById('crushStatus').value;
-    if (!formData.status) return alert("Please select status!");
-  } else if (step === 3) {
-    const fileInput = document.getElementById('crushPicture');
-    if (fileInput.files.length === 0) return alert("Please upload a picture!");
-
-    // Store the image as base64 data
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-      formData.picture = e.target.result; // Store base64 image data
-      step++;  // Proceed to the next step after the image is loaded
-      changeContent(); // Update content after processing
-    };
-
-    reader.readAsDataURL(file); // Convert image to base64
-    return; // Prevent the next step from triggering until the image is processed
-  } else if (step === 4) {
-    if (!formData.love) return alert("Please select if you love him/her!"); // Ensure love choice is selected
-  }
-
-  step++;
-  changeContent();
-}
-
-function setLove(choice) {
-  formData.love = choice;
-  step++;
-  changeContent();
-}
-
-function previewImage() {
-  const fileInput = document.getElementById('crushPicture');
-  const previewContainer = document.getElementById('imagePreview');
-
-  const file = fileInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      img.classList.add('album-cover'); // Add the CSS class here
-      previewContainer.innerHTML = ""; // Clear previous preview
-      previewContainer.appendChild(img);
-    };
-
-    reader.readAsDataURL(file); // Convert image to base64
-  }
-}
-
-// Load first step when the page loads
-changeContent();
+btnNo.addEventListener('click', () => {
+    image.src = "https://media.tenor.com/UNaQFutfOF0AAAAi/banana-crying-cat.gif"
+    title.innerHTML = "Oh no, please click yes"
+    happySound.pause()
+    sadSound.play()
+    sadSound.loop = true
+    btnNoScale -= 0.1;
+    btnYesScale += 0.1;
+    btnNo.style.transform = `scale(${btnNoScale})`
+    btnYes.style.transform = `scale(${btnYesScale})`
+});
